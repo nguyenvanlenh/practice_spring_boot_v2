@@ -6,12 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name="result_by_day_south_aggregates")
+@Table(name="result_by_day_south_aggregates", indexes = {@Index(columnList = "id",name = "idex_result_id")})
 public class LottoResultEntity {
 
 	@Id

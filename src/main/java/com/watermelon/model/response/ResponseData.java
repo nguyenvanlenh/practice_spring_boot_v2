@@ -1,11 +1,11 @@
 package com.watermelon.model.response;
 
-public class ResponseObject {
+public class ResponseData {
 	private Object data;
 	private int status;
 	private String title;
 	private String message;
-	public ResponseObject(Object data, int status, String title,String message) {
+	public ResponseData(Object data, int status, String title,String message) {
 		super();
 		this.data = data;
 		this.status = status;

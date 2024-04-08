@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name="location_aggregates")
 public class Location {
@@ -18,7 +20,9 @@ public class Location {
 	
 	private String location;
 	private String region;
+	@JsonProperty("created_at")
 	private LocalDateTime createdAt;
+	@JsonProperty("updated_at")
 	private LocalDateTime updatedAt;
 	public long getId() {
 		return id;

@@ -4,12 +4,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class LocationResponseDTO {
 
 	private long id;
 	private String region;
+	@JsonProperty("locations")
 	private List<String> listLocations;
+	@JsonProperty("created_at")
 	private LocalDateTime createdAt;
+	@JsonProperty("updated_at")
 	private LocalDateTime updatedAt;
 	public long getId() {
 		return id;

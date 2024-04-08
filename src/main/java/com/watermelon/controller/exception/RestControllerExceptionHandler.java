@@ -1,7 +1,7 @@
 package com.watermelon.controller.exception;
 
 import com.watermelon.model.response.EStatus;
-import com.watermelon.model.response.ResponseObject;
+import com.watermelon.model.response.ResponseData;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -24,16 +24,18 @@ public class RestControllerExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ResponseObject> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
+    public ResponseEntity<ResponseData> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ResponseObject(null, EStatus.BAD_REQUEST.getStatus(), EStatus.BAD_REQUEST.getTitle(),"Invalid parameter type for 'id'. It should be of type long.")
+                new ResponseData(null, EStatus.BAD_REQUEST.getStatus(), EStatus.BAD_REQUEST.getTitle(),"Invalid parameter type for 'id'. It should be of type long.")
         );
     }
+
+    
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-   public ResponseEntity<ResponseObject> handleNotFoundException(NoHandlerFoundException ex){
+   public ResponseEntity<ResponseData> handleNotFoundException(NoHandlerFoundException ex){
     	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-    			new ResponseObject(null, EStatus.NOT_FOUND.getStatus(), EStatus.NOT_FOUND.getTitle(),ex.getMessage())
+    			new ResponseData(null, EStatus.NOT_FOUND.getStatus(), EStatus.NOT_FOUND.getTitle(),ex.getMessage())
     			);
     }
     
@@ -42,16 +44,9 @@ public class RestControllerExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<Object> handleJwtValidationException(JwtValidationException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                new ResponseObject(null, EStatus.UNAUTHORIZED.getStatus(), EStatus.UNAUTHORIZED.getTitle(), ex.getMessage())
+                new ResponseData(null, EStatus.UNAUTHORIZED.getStatus(), EStatus.UNAUTHORIZED.getTitle(), ex.getMessage())
         );
     }
-//    @ExceptionHandler(AccessDeniedException.class)
-//    @ResponseStatus(HttpStatus.FORBIDDEN)
-//    public ResponseEntity<ResponseObject> handleAccessDeniedException(AccessDeniedException ex) {
-//        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-//                new ResponseObject(null, EStatus.FORBIDDEN.getStatus(), "Access denied: " + ex.getMessage())
-//        );
-//    }
-    
+
   
 }

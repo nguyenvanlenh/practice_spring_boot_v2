@@ -28,7 +28,7 @@ import com.watermelon.jwt.JwtTokenProvider;
 import com.watermelon.model.entity.Role;
 import com.watermelon.model.entity.User;
 import com.watermelon.model.response.EStatus;
-import com.watermelon.model.response.ResponseObject;
+import com.watermelon.model.response.ResponseData;
 import com.watermelon.payload.request.LoginRequest;
 import com.watermelon.payload.request.SignupRequest;
 import com.watermelon.payload.response.JwtResponse;
@@ -62,14 +62,14 @@ public class UserController {
 	private JwtTokenProvider tokenProvider;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ResponseObject> getUser(@PathVariable long id) {
+	public ResponseEntity<ResponseData> getUser(@PathVariable long id) {
 		Optional<User> user = userRepository.findById(id);
 
 		return user.isPresent()
 				? ResponseEntity.status(HttpStatus.OK)
-						.body(new ResponseObject(user, EStatus.SUCCESS.getStatus(), EStatus.SUCCESS.getTitle(),EStatus.SUCCESS.getDescription()))
+						.body(new ResponseData(user, EStatus.SUCCESS.getStatus(), EStatus.SUCCESS.getTitle(),EStatus.SUCCESS.getDescription()))
 				: ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body(new ResponseObject(null, EStatus.NOT_FOUND.getStatus(), EStatus.NOT_FOUND.getTitle(),EStatus.NOT_FOUND.getDescription()));
+						.body(new ResponseData(null, EStatus.NOT_FOUND.getStatus(), EStatus.NOT_FOUND.getTitle(),EStatus.NOT_FOUND.getDescription()));
 	}
 
 	@PostMapping("/signup")
@@ -90,7 +90,7 @@ public class UserController {
 		Set<String> strRoles = signupRequest.getListRoles();
 		Set<Role> listRoles = new HashSet<>();
 
-		if (listRoles.isEmpty()) {
+		if (strRoles.isEmpty()) {
 			Role role = roleService.findByNameRole("ROLE_USER")
 					.orElseThrow(() -> new RuntimeException("Error: Role is not found"));
 			listRoles.add(role);
@@ -135,14 +135,11 @@ public class UserController {
 							customUserDetails.getEmail(), customUserDetails.getPhone(), listRoles));
 		} catch (AuthenticationException e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-					new ResponseObject(null, EStatus.UNAUTHORIZED.getStatus(), EStatus.UNAUTHORIZED.getTitle(),"username or password is invalid")
+					new ResponseData(null, EStatus.UNAUTHORIZED.getStatus(), EStatus.UNAUTHORIZED.getTitle(),"username or password is invalid")
 					);
 		}
 	}
 
-	@GetMapping("/user")
-	public ResponseEntity<?> getUser(@RequestParam(name = "username") String username) {
-		return ResponseEntity.ok(customUserDetailService.loadUserByUsername(username));
-	}
+	
 
 }

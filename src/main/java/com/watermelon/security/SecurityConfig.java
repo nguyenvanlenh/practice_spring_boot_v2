@@ -17,9 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.watermelon.jwt.JwtAuthenticationFilter;
 
-//@Configurable
-//@EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@Configurable
+@EnableWebSecurity
 public class SecurityConfig {
 	@Autowired
 	private CustomUserDetailService customUserDetailService;
@@ -33,10 +32,6 @@ public class SecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer(){
-//        return (web) -> web.ignoring().antMatchers("/users/login", "/users/signup","/users/forgotPassword");
-//    }
 
 	@Bean(name = BeanIds.AUTHENTICATION_MANAGER)
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -53,15 +48,17 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/**").permitAll()
-//				.antMatchers("/api/v1/test/**").permitAll()
-				.anyRequest().authenticated();
-
-		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-		http.authenticationProvider(authenticationProvider());
-
-		return http.build();
+        http.cors(cors -> cors.disable())
+	        .authorizeHttpRequests(authorize -> 
+	        authorize.requestMatchers("/api/v1/auth/**").permitAll()
+	                .anyRequest().authenticated());
+			http.formLogin().and().logout().disable();
+	
+			http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+	
+			http.authenticationProvider(authenticationProvider());
+	
+			return http.build();
 	}
 
 }
